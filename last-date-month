@@ -5,7 +5,7 @@ pm.test('Status code is 200', () => {
   Compare if the date displayed on the response match with the last day of the month. 
   Conditions: 
     1. Results should be only from the previous 12 months.
-    3. 
+    2. Each month should have the last day of the month.
 */
 const jsonData = pm.response.json();
 
