@@ -1,0 +1,52 @@
+pm.test('Status code is 200', () => {
+    pm.response.to.have.status(200);
+});
+/**
+  Compare if the date displayed on the response match with the last day of the month. 
+  Conditions: 
+    1. Results should be only from the previous 12 months.
+    3. 
+*/
+const jsonData = pm.response.json();
+
+pm.test('Dates of: availableMonthPerfDates', () =>  {
+   pm.expect(jsonData.availableMonthPerfDates).to.be.an('object');
+
+    let date = new Date();
+    let totalMonths = Object.keys(jsonData.availableMonthPerfDates).length;
+    
+    if (totalMonths <= 12){
+        for(i = 0; i <= totalMonths - 1; i++){
+            let month = new Date(date.getFullYear(), date.getMonth() - i, 0).format('{yyyy}-{MM}-{dd}').toString();
+            pm.expect(Object.values(jsonData.availableMonthPerfDates)[i].toString()).to.eql(month);
+        }
+    }
+    else { throw new Error('Monthly performace allowed for only 12 months'); }
+});
+
+
+
+ const schemaETF = {
+         
+                "priceAsOfDateDisplay":"text",
+                "priceAsOfDateO":{},
+                "availableMonthPerfDates":{},
+                "performanceAsOfDateDisplay":"text",
+                "performanceAsOfDateO":{},
+                "fundGroups":[
+                    {
+                        "name":"text",
+                        "funds": "text" ,
+                        "id":"text",
+                        "empty": Boolean
+                    }
+                ],
+                "extraordinaryPerformance": Boolean,
+                "priceAsOfDate":{},
+                "performanceAsOfDate":{}
+         }
+
+pm.test('Validate schema',() => {
+    pm.response.to.have.jsonSchema(schemaETF);
+  });
+
